@@ -1,0 +1,15 @@
+Add everything I have built, with categories
+
+Ten repositories, newest first, each with the real repository creation date
+and a description that carries a number wherever there is one. A tool that
+searches sources and a tool that searches six sources and reports BLOCKED
+rather than a false zero are different claims, and only one is checkable.
+
+Categories are derived from the tags on the entries themselves rather than
+kept in a second list, so a category can never exist in the menu and nowhere
+else. Clicking one filters in place; ten things do not need a menu.
+
+publicsearch is listed with its honest state rather than left off: it is still
+a copy rather than a real extraction and the two need to agree on one home.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>

@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom";
+import { useState } from "react";
 import { entries, published, bySlug } from "./lib/journal.js";
+import { byDate, allTags } from "./lib/built.js";
 import "./styles.css";
 
 const SITE = "Gokul Sai";
@@ -39,7 +41,75 @@ function Index() {
         ))
       )}
 
-      <footer>Plain markdown files in a repo. No CMS, no database.</footer>
+      <footer>
+        Plain markdown files in a repo. No CMS, no database.
+        {"  ·  "}
+        <Link className="more" to="/built">Everything I have built →</Link>
+      </footer>
+    </div>
+  );
+}
+
+function Built() {
+  // null means everything. Categories filter the list rather than hiding it
+  // behind a menu, because there are ten things and a menu would be the
+  // bigger interface.
+  const [tag, setTag] = useState(null);
+  const shown = tag ? byDate.filter((t) => t.tags.includes(tag)) : byDate;
+
+  return (
+    <div className="wrap">
+      <header className="mast">
+        <Link className="back" to="/">← {SITE}</Link>
+        <h1>Everything I have built</h1>
+        <p>
+          Ten public repositories, all written on my own, oldest at the bottom.
+          The first one is from August.
+        </p>
+      </header>
+
+      <div className="tags">
+        <button
+          className={"tag" + (tag === null ? " on" : "")}
+          onClick={() => setTag(null)}
+        >
+          all <span>{byDate.length}</span>
+        </button>
+        {allTags.map(([name, count]) => (
+          <button
+            key={name}
+            className={"tag" + (tag === name ? " on" : "")}
+            onClick={() => setTag(tag === name ? null : name)}
+          >
+            {name} <span>{count}</span>
+          </button>
+        ))}
+      </div>
+
+      {shown.map((t) => (
+        <article className="tool" key={t.name}>
+          <div className="tool-head">
+            <h2>
+              <a href={t.url}>{t.name}</a>
+            </h2>
+            <div className="m">
+              {t.date}
+              {"  ·  "}
+              {t.lang}
+            </div>
+          </div>
+          <p>{t.what}</p>
+          {t.note && <p className="note">{t.note}</p>}
+          <div className="m links">
+            <a href={t.url}>source</a>
+            {t.live && <a href={t.live}>open it</a>}
+          </div>
+        </article>
+      ))}
+
+      <footer>
+        <Link to="/">← the writing</Link>
+      </footer>
     </div>
   );
 }
@@ -91,6 +161,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/e/:slug" element={<Entry />} />
+        <Route path="/built" element={<Built />} />
         <Route path="*" element={<Index />} />
       </Routes>
     </BrowserRouter>

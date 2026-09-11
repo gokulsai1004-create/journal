@@ -79,3 +79,30 @@ hr{border:0;border-top:1px solid var(--hairline);margin:2.4rem 0}
 
 footer{border-top:1px solid var(--hairline);margin-top:4.5rem;padding-top:1.4rem;
   font-family:var(--ui);color:var(--faint);font-size:.85rem}
+
+/* Everything I have built */
+.more{color:var(--accent)}
+.tags{display:flex;flex-wrap:wrap;gap:.45rem;margin:0 0 2.6rem}
+.tag{font:400 .82rem/1 var(--ui);color:var(--muted);cursor:pointer;
+  background:none;border:1px solid var(--hairline);border-radius:var(--r-pill);
+  padding:.42rem .8rem;transition:color var(--fast) var(--ease),
+  border-color var(--fast) var(--ease)}
+.tag span{color:var(--faint);font-variant-numeric:tabular-nums;margin-left:.25rem}
+.tag:hover{color:var(--ink);border-color:color-mix(in srgb,var(--ink) 22%,transparent)}
+.tag.on{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.tag.on span{color:var(--accent)}
+
+.tool{border-top:1px solid var(--hairline);padding:1.8rem 0;max-width:var(--prose)}
+.tool-head{display:flex;flex-wrap:wrap;gap:.2rem 1rem;align-items:baseline;
+  margin-bottom:.7rem}
+.tool h2{font-family:var(--display);font-weight:400;font-size:1.5rem;
+  letter-spacing:-.01em;margin:0}
+.tool h2 a{transition:color var(--fast) var(--ease)}
+.tool h2 a:hover{color:var(--accent)}
+.tool .m{font-family:var(--ui);color:var(--faint);font-size:.82rem;
+  font-variant-numeric:tabular-nums}
+.tool p{margin:0 0 .8rem}
+.tool .note{color:var(--muted);font-size:.98rem}
+.tool .links{display:flex;gap:1.1rem;margin-top:.9rem}
+.tool .links a{color:var(--accent);border-bottom:1px solid
+  color-mix(in srgb,var(--accent) 30%,transparent)}
