@@ -78,7 +78,7 @@ function Built() {
         <h1><Rise text="Everything I have built" step={0.026} /></h1>
         <p>
           <Drift
-            text="Ten public repositories, all written on my own, oldest at the bottom. The first one is from August."
+            text="Ten tools, all written on my own, oldest at the bottom. The first one is from August."
             delay={0.5}
           />
         </p>
