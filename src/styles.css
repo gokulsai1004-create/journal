@@ -1,0 +1,81 @@
+/* The system measured from resend.com in ../resend-copy/REFERENCE.md: type
+   scale, tracking that tightens as size grows, the 96/24 rhythm, radii, one
+   easing curve at two durations. The palette is ours. */
+:root{
+  --page:#faf7f2; --ink:#1d1813; --muted:#6f665c; --faint:#95897d;
+  --hairline:rgba(29,24,19,.10); --card:#fffdf9; --accent:#b0451c;
+  --gutter:24px; --section:96px; --measure:44rem; --prose:34rem;
+  --r-pill:9999px; --r-card:16px;
+  --ease:cubic-bezier(.4,0,.2,1); --fast:.15s; --slow:.2s;
+  --display:"Instrument Serif",ui-serif,Georgia,serif;
+  --ui:Inter,ui-sans-serif,-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#0c0a08; --ink:#f0efec; --muted:#9c948a; --faint:#7d746a;
+  --hairline:rgba(255,255,255,.08); --card:#141110; --accent:#e8703f;}}
+:root[data-theme="dark"]{--page:#0c0a08;--ink:#f0efec;--muted:#9c948a;
+  --faint:#7d746a;--hairline:rgba(255,255,255,.08);--card:#141110;--accent:#e8703f}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);
+  font:400 17px/1.62 var(--display);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+.wrap{max-width:var(--measure);margin:0 auto;padding:5rem var(--gutter) 7rem}
+
+.mast{margin-bottom:3.5rem}
+.mast h1{font-family:var(--display);font-weight:400;
+  font-size:clamp(2.1rem,6vw,3rem);letter-spacing:-.03em;line-height:1.02;
+  margin:0 0 .7rem}
+.mast p{color:var(--muted);font-size:1.08rem;margin:0;max-width:var(--prose)}
+.mast .back{display:inline-block;font-family:var(--ui);font-size:.9rem;
+  color:var(--faint);margin-bottom:2.2rem;
+  transition:color var(--fast) var(--ease)}
+.mast .back:hover{color:var(--accent)}
+
+.entry-link{display:block;border-bottom:1px solid var(--hairline);
+  padding:1.4rem 0;transition:color var(--fast) var(--ease)}
+.entry-link:first-of-type{border-top:1px solid var(--hairline)}
+.entry-link .t{font-size:1.25rem;letter-spacing:-.01em;line-height:1.3}
+.entry-link .d{color:var(--muted);font-size:1rem;margin-top:.35rem;
+  max-width:var(--prose)}
+.entry-link .m{font-family:var(--ui);color:var(--faint);font-size:.82rem;
+  margin-top:.5rem;font-variant-numeric:tabular-nums}
+.entry-link:hover .t{color:var(--accent)}
+.entry-link .flag{font-family:var(--ui);font-size:.7rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+  border-radius:var(--r-pill);padding:2px 8px;margin-left:.5rem;
+  vertical-align:middle}
+
+.empty{color:var(--muted);font-style:italic}
+
+article{max-width:var(--prose)}
+article h1{font-family:var(--display);font-weight:400;
+  font-size:clamp(1.9rem,5vw,2.5rem);letter-spacing:-.02em;line-height:1.12;
+  margin:0 0 .5rem}
+article .byline{font-family:var(--ui);color:var(--faint);font-size:.9rem;
+  margin:0 0 2.6rem}
+article h2{font-size:1.35rem;font-weight:600;letter-spacing:-.01em;
+  margin:2.4rem 0 .8rem}
+article h3{font-size:1.1rem;font-weight:600;margin:1.8rem 0 .6rem}
+article p{margin:0 0 1.1rem}
+article ul,article ol{padding-left:1.2rem;margin:0 0 1.1rem}
+article li{margin-bottom:.4rem}
+article a{color:var(--accent);border-bottom:1px solid
+  color-mix(in srgb,var(--accent) 30%,transparent)}
+blockquote{margin:1.6rem 0;padding-left:1.1rem;
+  border-left:2px solid var(--hairline);color:var(--muted)}
+pre{background:color-mix(in srgb,var(--ink) 6%,transparent);
+  border:1px solid var(--hairline);border-radius:.6rem;padding:1rem 1.1rem;
+  overflow-x:auto;font:400 .85rem/1.5 var(--mono)}
+code{font-family:var(--mono);font-size:.9em}
+p code,li code{background:color-mix(in srgb,var(--ink) 7%,transparent);
+  padding:.08em .35em;border-radius:.25rem}
+pre code{background:none;padding:0}
+hr{border:0;border-top:1px solid var(--hairline);margin:2.4rem 0}
+
+footer{border-top:1px solid var(--hairline);margin-top:4.5rem;padding-top:1.4rem;
+  font-family:var(--ui);color:var(--faint);font-size:.85rem}
