@@ -70,13 +70,10 @@ export function useProgress() {
 export function useReveal(deps = []) {
   useEffect(() => {
     const items = document.querySelectorAll("[data-reveal]");
-    // Anything already on screen at mount animates immediately. Waiting for an
-    // intersection that has already happened is how a masthead sits invisible
-    // until the reader scrolls, which on a short page is never.
     // Marked with an attribute rather than a class. React owns className and
-    // rewrites the whole attribute on any re-render, so a class added here got
-    // wiped the moment the keyboard walk changed a highlight, and two entries
-    // silently went invisible. React does not manage data-in, so it survives.
+    // rewrites the whole attribute on any re-render, so a class added here gets
+    // wiped the next time anything on the page changes state, and the element
+    // silently goes back to invisible. React does not manage data-in.
     const show = (el) => el.setAttribute("data-in", "");
     if (stillness() || !("IntersectionObserver" in window)) {
       items.forEach(show);
@@ -96,14 +93,15 @@ export function useReveal(deps = []) {
 
     // Anything already on screen is shown now, without waiting to be told. An
     // observer only reports a crossing, so a masthead that was never below the
-    // fold has no crossing to report, and a page that is not being painted at
-    // all computes no intersections either. Either way the reader gets a blank
+    // fold has no crossing to report, and a page that is not being painted
+    // computes no intersections at all. Either way the reader gets a blank
     // heading, which is the worst possible failure for a thing whose only job
     // is to make text appear.
-    // Measured here and now, not inside requestAnimationFrame: a frame callback
-    // does not run at all while a tab is not being painted, so the check meant
-    // to rescue an unpainted page was itself waiting on the painting. Layout is
-    // already committed by the time an effect runs, so just ask.
+    //
+    // Measured here rather than inside requestAnimationFrame, because a frame
+    // callback does not run while a tab is unpainted either, so the rescue was
+    // waiting on the same thing it was rescuing. Layout is already committed by
+    // the time an effect runs, so just ask.
     items.forEach((el) => {
       const box = el.getBoundingClientRect();
       if (box.top < window.innerHeight && box.bottom > 0) show(el);
@@ -113,52 +111,4 @@ export function useReveal(deps = []) {
     return () => seen.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
-}
-
-/** Walk the list with the keyboard and open with enter.
- *
- *  Rare enough that people notice, and the reason it is here rather than as a
- *  flourish: a list you can only reach with a mouse is a list some people
- *  cannot reach at all.
- */
-export function useKeys(count, onOpen) {
-  const [at, setAt] = useState(-1);
-
-  useEffect(() => {
-    const typing = (el) =>
-      el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
-
-    const onKey = (e) => {
-      if (e.metaKey || e.ctrlKey || e.altKey || typing(document.activeElement)) return;
-      const down = e.key === "ArrowDown" || e.key === "j";
-      const up = e.key === "ArrowUp" || e.key === "k";
-      if (!down && !up && e.key !== "Enter") return;
-      if (count === 0) return;
-
-      if (e.key === "Enter") {
-        if (at >= 0) {
-          e.preventDefault();
-          onOpen(at);
-        }
-        return;
-      }
-      e.preventDefault();
-      setAt((was) => {
-        const next = was < 0 ? (down ? 0 : count - 1) : was + (down ? 1 : -1);
-        return Math.max(0, Math.min(count - 1, next));
-      });
-    };
-
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [count, at, onOpen]);
-
-  useEffect(() => {
-    if (at < 0) return;
-    const el = document.querySelectorAll("[data-walk]")[at];
-    if (el) el.scrollIntoView({ block: "nearest",
-      behavior: stillness() ? "auto" : "smooth" });
-  }, [at]);
-
-  return at;
 }

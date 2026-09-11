@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom";
-import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { entries, published, bySlug } from "./lib/journal.js";
 import { byDate, allTags } from "./lib/built.js";
-import { useTheme, useProgress, useReveal, useKeys } from "./lib/ui.js";
+import { useTheme, useProgress, useReveal } from "./lib/ui.js";
 import { Rise, Drift } from "./lib/Type.jsx";
 import "./styles.css";
 
@@ -17,9 +16,6 @@ const TAGLINE =
 const visible = import.meta.env.DEV ? entries : published;
 
 function Index() {
-  const go = useNavigate();
-  const open = useCallback((i) => go(`/e/${visible[i].slug}`), [go]);
-  const at = useKeys(visible.length, open);
   useReveal();
 
   return (
@@ -28,9 +24,6 @@ function Index() {
       <header className="mast" data-reveal>
         <h1><Rise text={SITE} /></h1>
         <p><Drift text={TAGLINE} delay={0.42} /></p>
-        <p className="hint">
-          <kbd>j</kbd> <kbd>k</kbd> to walk, <kbd>enter</kbd> to open
-        </p>
       </header>
 
       {visible.length === 0 ? (
@@ -39,12 +32,11 @@ function Index() {
           it.
         </p>
       ) : (
-        visible.map((entry, i) => (
+        visible.map((entry) => (
           <Link
-            className={"entry-link" + (at === i ? " at" : "")}
+            className="entry-link"
             key={entry.slug}
             to={`/e/${entry.slug}`}
-            data-walk
             data-reveal
           >
             <div className="t">
