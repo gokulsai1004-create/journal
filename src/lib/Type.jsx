@@ -7,6 +7,7 @@
 // Every piece of this is off when prefers-reduced-motion is set, and off means
 // the text is simply there, not that it fades slower.
 
+import { Fragment } from "react";
 import { stillness } from "./ui.js";
 
 /** A heading whose letters rise from behind the line, one after another. */
@@ -20,7 +21,8 @@ export function Rise({ text, className = "", step = 0.038, delay = 0 }) {
   return (
     <span className={"rise " + className} aria-label={text}>
       {words.map((word, w) => (
-        <span className="rise-word" key={w} aria-hidden="true">
+        <Fragment key={w}>
+        <span className="rise-word" aria-hidden="true">
           {[...word].map((ch, i) => {
             const at = delay + n++ * step;
             return (
@@ -35,6 +37,11 @@ export function Rise({ text, className = "", step = 0.038, delay = 0 }) {
             );
           })}
         </span>
+        {/* A real space, not a CSS margin. The gap has to survive being read
+            rather than looked at: copy the heading, or open it in reader mode,
+            and a margin leaves you with one long unbroken word. */}
+        {w < words.length - 1 ? " " : null}
+        </Fragment>
       ))}
     </span>
   );

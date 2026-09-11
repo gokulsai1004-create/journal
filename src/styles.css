@@ -154,7 +154,6 @@ footer{border-top:1px solid var(--hairline);margin-top:4.5rem;padding-top:1.4rem
    has to be generous or the mask clips the descenders. */
 .rise{display:inline}
 .rise-word{display:inline-block;white-space:nowrap}
-.rise-word + .rise-word{margin-left:.26em}
 .rise-mask{display:inline-block;overflow:hidden;vertical-align:bottom;
   padding-bottom:.12em;margin-bottom:-.12em}
 .rise-ch{display:inline-block;transform:translateY(105%);
