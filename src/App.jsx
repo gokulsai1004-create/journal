@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { entries, published, bySlug } from "./lib/journal.js";
 import { byDate, allTags } from "./lib/built.js";
 import { useTheme, useProgress, useReveal, useKeys } from "./lib/ui.js";
+import { Rise, Drift } from "./lib/Type.jsx";
 import "./styles.css";
 
 const SITE = "Gokul Sai";
@@ -25,8 +26,8 @@ function Index() {
     <div className="wrap">
       <Switch />
       <header className="mast" data-reveal>
-        <h1>{SITE}</h1>
-        <p>{TAGLINE}</p>
+        <h1><Rise text={SITE} /></h1>
+        <p><Drift text={TAGLINE} delay={0.42} /></p>
         <p className="hint">
           <kbd>j</kbd> <kbd>k</kbd> to walk, <kbd>enter</kbd> to open
         </p>
@@ -82,10 +83,12 @@ function Built() {
       <Switch />
       <header className="mast">
         <Link className="back" to="/">← {SITE}</Link>
-        <h1>Everything I have built</h1>
+        <h1><Rise text="Everything I have built" step={0.026} /></h1>
         <p>
-          Ten public repositories, all written on my own, oldest at the bottom.
-          The first one is from August.
+          <Drift
+            text="Ten public repositories, all written on my own, oldest at the bottom. The first one is from August."
+            delay={0.5}
+          />
         </p>
       </header>
 
@@ -181,7 +184,7 @@ function Entry() {
         <Link className="back" to="/">← {SITE}</Link>
       </header>
       <article>
-        <h1>{entry.title}</h1>
+        <h1><Rise text={entry.title} step={0.016} /></h1>
         <p className="byline">
           {[entry.date, `${entry.minutes} min`].filter(Boolean).join("  ·  ")}
         </p>

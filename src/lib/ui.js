@@ -70,6 +70,9 @@ export function useProgress() {
 export function useReveal(deps = []) {
   useEffect(() => {
     const items = document.querySelectorAll("[data-reveal]");
+    // Anything already on screen at mount animates immediately. Waiting for an
+    // intersection that has already happened is how a masthead sits invisible
+    // until the reader scrolls, which on a short page is never.
     // Marked with an attribute rather than a class. React owns className and
     // rewrites the whole attribute on any re-render, so a class added here got
     // wiped the moment the keyboard walk changed a highlight, and two entries
@@ -90,7 +93,23 @@ export function useReveal(deps = []) {
       },
       { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
     );
-    items.forEach((el) => seen.observe(el));
+
+    // Anything already on screen is shown now, without waiting to be told. An
+    // observer only reports a crossing, so a masthead that was never below the
+    // fold has no crossing to report, and a page that is not being painted at
+    // all computes no intersections either. Either way the reader gets a blank
+    // heading, which is the worst possible failure for a thing whose only job
+    // is to make text appear.
+    // Measured here and now, not inside requestAnimationFrame: a frame callback
+    // does not run at all while a tab is not being painted, so the check meant
+    // to rescue an unpainted page was itself waiting on the painting. Layout is
+    // already committed by the time an effect runs, so just ask.
+    items.forEach((el) => {
+      const box = el.getBoundingClientRect();
+      if (box.top < window.innerHeight && box.bottom > 0) show(el);
+      else seen.observe(el);
+    });
+
     return () => seen.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);

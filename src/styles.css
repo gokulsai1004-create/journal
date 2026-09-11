@@ -153,3 +153,40 @@ kbd{font:500 .78em/1 var(--mono);border:1px solid var(--hairline);
   .entry-link .arrow{transition:none}
   *{scroll-behavior:auto !important}
 }
+
+/* Kinetic type. Letters start below the line and rise into it, each a beat
+   after the one before, so it reads as one movement rather than many.
+
+   The mask is a real overflow-hidden box per character, which is why they
+   emerge from behind the line instead of sliding over the page. Line height
+   has to be generous or the mask clips the descenders. */
+.rise{display:inline}
+.rise-word{display:inline-block;white-space:nowrap}
+.rise-word + .rise-word{margin-left:.26em}
+.rise-mask{display:inline-block;overflow:hidden;vertical-align:bottom;
+  padding-bottom:.12em;margin-bottom:-.12em}
+.rise-ch{display:inline-block;transform:translateY(105%);
+  transition:transform .74s cubic-bezier(.22,.8,.26,1)}
+[data-in] .rise-ch,.rise.now .rise-ch{transform:none}
+
+.drift{display:inline}
+.drift-word{display:inline-block;opacity:0;transform:translateY(.42em);
+  transition:opacity .5s var(--ease),transform .5s var(--ease)}
+[data-in] .drift-word,.drift.now .drift-word{opacity:1;transform:none}
+
+/* The entry title wipes from muted to full as the cursor crosses it, left to
+   right. A colour change everywhere at once is a state; a wipe is a gesture. */
+.entry-link .t{background-image:linear-gradient(var(--accent),var(--accent));
+  background-repeat:no-repeat;background-size:0% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  transition:background-size .42s cubic-bezier(.22,.8,.26,1)}
+.entry-link:hover .t,.entry-link.at .t{background-size:100% 100%;
+  -webkit-text-fill-color:transparent}
+
+@media (prefers-reduced-motion:reduce){
+  .rise-ch{transform:none;transition:none}
+  .drift-word{opacity:1;transform:none;transition:none}
+  .entry-link .t{transition:none;background-size:0% 100%}
+  .entry-link:hover .t,.entry-link.at .t{-webkit-text-fill-color:currentColor;
+    color:var(--accent)}
+}
