@@ -193,7 +193,9 @@ function Entry() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    // The router has to know it is living under a prefix, or every link it
+    // builds points at the root of the domain and leaves the site.
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/e/:slug" element={<Entry />} />
