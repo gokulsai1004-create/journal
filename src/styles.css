@@ -106,3 +106,50 @@ footer{border-top:1px solid var(--hairline);margin-top:4.5rem;padding-top:1.4rem
 .tool .links{display:flex;gap:1.1rem;margin-top:.9rem}
 .tool .links a{color:var(--accent);border-bottom:1px solid
   color-mix(in srgb,var(--accent) 30%,transparent)}
+
+/* Movement. One curve, two durations, and none of it runs for a reader who
+   has asked their machine to stop animating things. */
+[data-reveal]{opacity:0;transform:translateY(10px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease)}
+[data-reveal][data-in]{opacity:1;transform:none}
+
+/* The reading hairline. A long entry raises a real question, which is whether
+   you are nearly there, and this answers it without taking any space. */
+.read{position:fixed;top:0;left:0;right:0;height:2px;background:var(--accent);
+  transform-origin:0 50%;transform:scaleX(0);z-index:5}
+
+/* Theme switch. The palette always had light and dark; there was no way to
+   pick, so a reader in a bright room had no option. */
+.switch{position:fixed;top:1rem;right:1rem;z-index:6;cursor:pointer;
+  font:400 .74rem/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--faint);background:var(--page);border:1px solid var(--hairline);
+  border-radius:var(--r-pill);padding:.45rem .8rem;
+  transition:color var(--fast) var(--ease),border-color var(--fast) var(--ease)}
+.switch:hover{color:var(--accent);
+  border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+
+.hint{font-family:var(--ui);font-size:.82rem;color:var(--faint);
+  margin-top:1.1rem !important}
+kbd{font:500 .78em/1 var(--mono);border:1px solid var(--hairline);
+  border-bottom-width:2px;border-radius:4px;padding:.18em .42em;
+  color:var(--muted)}
+
+/* The arrow lives outside the text and slides in, so nothing reflows when it
+   appears and the title does not move under the cursor. */
+.entry-link .t{position:relative}
+.entry-link .arrow{position:absolute;left:-1.35rem;color:var(--accent);
+  opacity:0;transform:translateX(-.3rem);
+  transition:opacity var(--slow) var(--ease),transform var(--slow) var(--ease)}
+.entry-link:hover .arrow,.entry-link.at .arrow{opacity:1;transform:none}
+.entry-link.at .t{color:var(--accent)}
+.entry-link.at{background:color-mix(in srgb,var(--accent) 5%,transparent)}
+.entry-link:focus-visible{outline:2px solid var(--accent);outline-offset:3px;
+  border-radius:4px}
+.tool h2 a:focus-visible,.tag:focus-visible,.switch:focus-visible{
+  outline:2px solid var(--accent);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  [data-reveal]{opacity:1;transform:none;transition:none}
+  .entry-link .arrow{transition:none}
+  *{scroll-behavior:auto !important}
+}

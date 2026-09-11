@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { entries, published, bySlug } from "./lib/journal.js";
 import { byDate, allTags } from "./lib/built.js";
+import { useTheme, useProgress, useReveal, useKeys } from "./lib/ui.js";
 import "./styles.css";
 
 const SITE = "Gokul Sai";
@@ -14,11 +16,20 @@ const TAGLINE =
 const visible = import.meta.env.DEV ? entries : published;
 
 function Index() {
+  const go = useNavigate();
+  const open = useCallback((i) => go(`/e/${visible[i].slug}`), [go]);
+  const at = useKeys(visible.length, open);
+  useReveal();
+
   return (
     <div className="wrap">
-      <header className="mast">
+      <Switch />
+      <header className="mast" data-reveal>
         <h1>{SITE}</h1>
         <p>{TAGLINE}</p>
+        <p className="hint">
+          <kbd>j</kbd> <kbd>k</kbd> to walk, <kbd>enter</kbd> to open
+        </p>
       </header>
 
       {visible.length === 0 ? (
@@ -27,9 +38,16 @@ function Index() {
           it.
         </p>
       ) : (
-        visible.map((entry) => (
-          <Link className="entry-link" key={entry.slug} to={`/e/${entry.slug}`}>
+        visible.map((entry, i) => (
+          <Link
+            className={"entry-link" + (at === i ? " at" : "")}
+            key={entry.slug}
+            to={`/e/${entry.slug}`}
+            data-walk
+            data-reveal
+          >
             <div className="t">
+              <span className="arrow" aria-hidden="true">&rarr;</span>
               {entry.title}
               {entry.draft && <span className="flag">draft</span>}
             </div>
@@ -56,9 +74,12 @@ function Built() {
   // bigger interface.
   const [tag, setTag] = useState(null);
   const shown = tag ? byDate.filter((t) => t.tags.includes(tag)) : byDate;
+  // Keyed on the filter so a newly shown tool arrives rather than appears.
+  useReveal([tag]);
 
   return (
     <div className="wrap">
+      <Switch />
       <header className="mast">
         <Link className="back" to="/">← {SITE}</Link>
         <h1>Everything I have built</h1>
@@ -87,7 +108,7 @@ function Built() {
       </div>
 
       {shown.map((t) => (
-        <article className="tool" key={t.name}>
+        <article className="tool" key={tag + t.name} data-reveal>
           <div className="tool-head">
             <h2>
               <a href={t.url}>{t.name}</a>
@@ -114,9 +135,27 @@ function Built() {
   );
 }
 
+const MODES = ["auto", "light", "dark"];
+
+function Switch() {
+  const [theme, setTheme] = useTheme();
+  const next = MODES[(MODES.indexOf(theme) + 1) % MODES.length];
+  return (
+    <button
+      className="switch"
+      onClick={() => setTheme(next)}
+      title={`Theme: ${theme}. Click for ${next}.`}
+      aria-label={`Theme: ${theme}. Switch to ${next}.`}
+    >
+      {theme}
+    </button>
+  );
+}
+
 function Entry() {
   const { slug } = useParams();
   const entry = bySlug(slug);
+  const read = useProgress();
 
   if (!entry) {
     // Say which one is missing. "Not found" with no subject is a dead end.
@@ -136,6 +175,8 @@ function Entry() {
 
   return (
     <div className="wrap">
+      <div className="read" style={{ transform: `scaleX(${read})` }} />
+      <Switch />
       <header className="mast">
         <Link className="back" to="/">← {SITE}</Link>
       </header>
