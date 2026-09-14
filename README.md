@@ -50,7 +50,7 @@ not itself emit, and the only source is files in this repo.
 
 ## Elsewhere
 
-[github.com/gokulsai1004-create](https://github.com/gokulsai1004-create) — twelve
+[github.com/VGokulsai](https://github.com/VGokulsai) — twelve
 public repos, all written on my own.
 
 - **painpoint-finder** — searches six public sources for people describing a
@@ -62,6 +62,6 @@ public repos, all written on my own.
   page number, then checks that page.
 - **outbabyout** — real-life tag with a revive. Rules, a live match console and a
   field map at
-  [gokulsai1004-create.github.io/outbabyout](https://gokulsai1004-create.github.io/outbabyout).
+  [vgokulsai.github.io/outbabyout](https://vgokulsai.github.io/outbabyout).
 
 gokulsai1004@gmail.com
